@@ -26,7 +26,7 @@ SubScan fixes that.
 
 ## Dashboard Preview
 
-![SubScan Dashboard Preview](dashboard.png)
+![SubScan Dashboard Preview](dashboard.png.png)
 
 > The dashboard surfaces every wasted license by employee name, tool, department, and monthly cost — giving finance teams a ready-to-act cut-list in seconds.
 
