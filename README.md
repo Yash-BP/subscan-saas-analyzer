@@ -1,65 +1,83 @@
 # SubScan — SaaS Subscription Waste Analyzer
 
-> **Identified $35,064 in annualised wasted software spend** inside a simulated 75-employee company using an automated Python + SQL ETL pipeline and Power BI dashboard.
+Identified **$35,064 in annualised wasted software spend** across a simulated 75-employee company using a Python + SQL ETL pipeline and Power BI dashboard.
 
 ---
 
 ## The Problem
 
-Companies accumulate wasteful SaaS spending through unused seats, failed employee offboarding, and forgotten trial conversions. Finance teams lack a single automated view to catch it — so it quietly bleeds every month.
+Companies bleed money through SaaS subscriptions that no one uses — terminated employees still billing, paid seats sitting idle, tools provisioned to departments that don't need them. Finance teams have no automated way to catch it.
 
-SubScan fixes that.
+SubScan automates the audit entirely.
 
 ---
 
-## Business Value
+## Business Results
 
 | Metric | Result |
 |---|---|
-| Annualised waste identified | **$35,064** |
-| Monthly waste identified | **$2,922** |
-| Total subscriptions audited | **75** |
-| Waste categories detected | Zombie Licenses + Terminated Employee Accounts |
+| Annualised waste identified | $35,064 |
+| Monthly waste identified | $2,922 |
+| Subscriptions audited | 375 across 75 employees |
+| Waste categories detected | Zombie licenses + terminated employee accounts |
 | Audit process | Fully automated — replaces manual spreadsheet review |
-
----
-
-## Dashboard Preview
-
-![SubScan Dashboard Preview](dashboard.png.png)
-
-> The dashboard surfaces every wasted license by employee name, tool, department, and monthly cost — giving finance teams a ready-to-act cut-list in seconds.
 
 ---
 
 ## How It Works
 
 ```
-Raw Billing CSVs  →  SQLite Database  →  Analytics Engine  →  Power BI Dashboard
+generate_billing_data.py  →  setup_db.py  →  analyze_waste.py  →  Power BI
+       (CSV generation)       (SQLite load)    (SQL + Pandas)     (Dashboard)
 ```
 
-1. **Generate** — Creates a realistic multi-table billing dataset with injected anomalies
-2. **Load** — Ingests raw CSVs into a local SQLite relational database
-3. **Analyse** — Applies business rules to detect waste, logs every execution step
-4. **Report** — Exports a clean `identified_waste_report.csv` consumed by Power BI
+**Step 1 — Generate** (`generate_billing_data.py`)  
+Builds a realistic multi-table billing dataset using Faker — 75 employees across 6 departments, 10 SaaS tools with real pricing, and intentionally injected anomalies: terminated employees still billing, Asana and Monday.com both assigned to Marketing, Tableau pushed to HR and Finance at random.
+
+**Step 2 — Load** (`setup_db.py`)  
+Ingests the three CSVs (`employees`, `subscriptions`, `usage_logs`) into a normalized SQLite database using `pandas.to_sql`.
+
+**Step 3 — Analyse** (`analyze_waste.py`)  
+Joins all three tables via SQL queries inside Python, applies `.env`-configured business rules to classify waste, logs every execution step to `execution_audit.log`, and exports `identified_waste_report.csv` for Power BI.
+
+**Step 4 — Report** (`setup_powerbi_views.sql`)  
+Injects two SQL views directly into the database — `vw_wasted_licenses_detail` (row-level) and `vw_executive_waste_summary` (aggregated by tool with annualised cost) — so Power BI connects to pre-calculated, always-current data.
 
 ---
 
-## Waste Categories Detected
+## Waste Detection Logic
 
-- **Zombie Licenses** — Active paid seats with zero logins recorded in the past 30 days
-- **Terminated Employee Accounts** — Subscriptions still billing for offboarded staff
+Two categories are flagged, both configurable via `.env`:
 
-### Top Wasted Tools (from dashboard)
+- **Zombie license** — active paid seat, zero logins in the past 30 days (`INACTIVITY_THRESHOLD_DAYS=30`)
+- **Terminated employee** — employee status is `Terminated` but subscription remains `Active`
 
-| Tool | Monthly Waste | Waste Type |
-|---|---|---|
-| Salesforce | Highest | Zombie Licenses + Terminated Employees |
-| HubSpot | High | Zombie Licenses + Terminated Employees |
-| Tableau | Medium | Zombie Licenses |
-| Adobe CC | Medium | Zombie Licenses |
-| Figma | Medium | Zombie Licenses + Terminated Employees |
-| Zoom | Medium | Zombie Licenses |
+The inactivity threshold is decoupled from the codebase so business rules can be adjusted without touching any Python.
+
+---
+
+## Database Schema
+
+Three normalized tables:
+
+```
+employees       subscriptions        usage_logs
+----------      -------------        ----------
+emp_id    <──── emp_id               sub_id
+name            sub_id  <────────── sub_id
+department      tool_name            emp_id
+status          monthly_cost         tool_name
+email           license_status       last_login_date
+                                     logins_last_30_days
+```
+
+---
+
+## Power BI Views
+
+`vw_wasted_licenses_detail` — employee-level detail: name, department, tool, monthly cost, last login, login count. Filtered to active subscriptions with zero usage.
+
+`vw_executive_waste_summary` — aggregated by tool: unused license count, total monthly waste, total annualised waste. Ordered by cost descending — Salesforce and HubSpot surface first.
 
 ---
 
@@ -67,72 +85,53 @@ Raw Billing CSVs  →  SQLite Database  →  Analytics Engine  →  Power BI Das
 
 | Tool | Role |
 |---|---|
-| Python | Core ETL logic, automated logging, environment config |
-| SQLite + SQL | Relational database storage and querying |
-| Pandas | Data transformation, table merging, business rule execution |
-| python-dotenv | Secure decoupling of business rules from codebase |
-| Power BI / Excel | Stakeholder dashboard and final reporting |
-
----
-
-## Project Structure
-
-```
-SubScan/
-│
-├── scripts/
-│   ├── generate_billing_data.py     # Builds realistic multi-table dataset with anomalies
-│   ├── setup_db.py                  # Ingests CSVs into local SQLite database
-│   └── analyze_waste.py             # Core analytics engine — SQL queries + business logic
-│
-├── data/
-│   ├── company_database.db          # Local SQLite database (generated)
-│   └── identified_waste_report.csv  # Final output consumed by Power BI
-│
-├── .env                             # Business rule config — git ignored
-├── execution_audit.log              # Timestamped run logs — git ignored
-├── requirements.txt
-└── README.md
-```
+| Python | ETL orchestration, logging, environment config |
+| SQLite + SQL | Relational data storage, JOIN queries, Power BI views |
+| Pandas | Table merging, business rule application, CSV export |
+| Faker | Realistic synthetic dataset generation |
+| python-dotenv | Business rule config decoupled from codebase |
+| Power BI + Excel | Stakeholder dashboard and cut-list reporting |
 
 ---
 
 ## Quickstart
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/Yash-BP/subscan.git
-cd subscan
+git clone https://github.com/Yash-BP/subscan-saas-analyzer.git
+cd subscan-saas-analyzer
 
-# 2. Install dependencies
 pip install pandas faker python-dotenv
 
-# 3. Generate the raw billing dataset
 python scripts/generate_billing_data.py
-
-# 4. Build the SQLite database
 python scripts/setup_db.py
-
-# 5. Run the analytics engine
 python scripts/analyze_waste.py
 ```
 
-Output: `data/identified_waste_report.csv` — ready to connect to Power BI.
+Output: `data/identified_waste_report.csv` — connect directly to Power BI.
+
+To inject the executive views: `python scripts/run_sql.py`
 
 ---
 
-## Enterprise-Ready Design
+## Project Structure
 
-This pipeline is built for real corporate deployment, not just a demo:
-
-- **Secure config** — Business rules (e.g. inactivity thresholds) stored in `.env` variables, fully decoupled from the codebase
-- **Relational database** — Queries a structured SQLite DB rather than static flat files, mirroring production data environments
-- **Execution logging** — Python's `logging` library generates timestamped audit logs for every pipeline run
-- **Live dashboarding** — Power BI connects directly to the pipeline output for an always-current view of software spend
+```
+subscan-saas-analyzer/
+├── scripts/
+│   ├── generate_billing_data.py   # Synthetic dataset with injected anomalies
+│   ├── setup_db.py                # CSV to SQLite ingestion
+│   ├── analyze_waste.py           # Core analytics engine
+│   ├── setup_powerbi_views.sql    # vw_executive_waste_summary + vw_wasted_licenses_detail
+│   └── run_sql.py                 # View injection runner
+├── data/
+│   ├── employees.csv
+│   ├── subscriptions.csv
+│   ├── usage_logs.csv
+│   └── identified_waste_report.csv
+├── .env.example
+└── README.md
+```
 
 ---
 
-## Author
-
-**Yash Bhusari** — Aspiring Data Analyst  
-[LinkedIn](https://linkedin.com/in/yash-bhusari-0b83a6282) · [GitHub](https://github.com/Yash-BP)
+**Yash Bhusari** — [LinkedIn](https://www.linkedin.com/in/yash-bhusari) · [GitHub](https://github.com/Yash-BP)
