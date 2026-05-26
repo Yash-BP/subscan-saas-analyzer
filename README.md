@@ -19,7 +19,7 @@ SubScan automates the audit entirely.
 | Annualised waste identified | $35,064 |
 | Monthly waste identified | $2,922 |
 | Subscriptions audited | 375 across 75 employees |
-| Waste categories detected | Zombie licenses + terminated employee accounts |
+| Waste categories detected | Zombie licenses + terminated employee accounts + at-risk licenses |
 | Audit process | Fully automated — replaces manual spreadsheet review |
 
 ---
@@ -27,18 +27,25 @@ SubScan automates the audit entirely.
 ## How It Works
 
 ```
-generate_billing_data.py  →  setup_db.py  →  analyze_waste.py  →  Power BI
-       (CSV generation)       (SQLite load)    (SQL + Pandas)     (Dashboard)
+run_pipeline.py orchestrates the full ETL in one command
+    ↓
+generate_billing_data.py (CSV generation)
+    ↓
+setup_db.py (SQLite load)
+    ↓
+analyze_waste.py (SQL + Pandas analysis)
+    ↓
+Power BI (dashboard + reporting)
 ```
 
 **Step 1 — Generate** (`generate_billing_data.py`)  
 Builds a realistic multi-table billing dataset using Faker — 75 employees across 6 departments, 10 SaaS tools with real pricing, and intentionally injected anomalies: terminated employees still billing, Asana and Monday.com both assigned to Marketing, Tableau pushed to HR and Finance at random.
 
 **Step 2 — Load** (`setup_db.py`)  
-Ingests the three CSVs (`employees`, `subscriptions`, `usage_logs`) into a normalized SQLite database using `pandas.to_sql`.
+Ingests the three CSVs (`employees`, `subscriptions`, `usage_logs`) into a normalized SQLite database using `pandas.to_sql`. Includes schema validation, row-count reconciliation, and foreign-key integrity checks before committing.
 
 **Step 3 — Analyse** (`analyze_waste.py`)  
-Joins all three tables via SQL queries inside Python, applies `.env`-configured business rules to classify waste, logs every execution step to `execution_audit.log`, and exports `identified_waste_report.csv` for Power BI.
+Joins all three tables via a single SQL query inside Python, applies `.env`-configured business rules to classify waste into three tiers (Terminated, Zombie, At-Risk), logs every execution step, and exports three CSVs: detail report, department rollup, and tool rollup.
 
 **Step 4 — Report** (`setup_powerbi_views.sql`)  
 Injects two SQL views directly into the database — `vw_wasted_licenses_detail` (row-level) and `vw_executive_waste_summary` (aggregated by tool with annualised cost) — so Power BI connects to pre-calculated, always-current data.
@@ -47,12 +54,13 @@ Injects two SQL views directly into the database — `vw_wasted_licenses_detail`
 
 ## Waste Detection Logic
 
-Two categories are flagged, both configurable via `.env`:
+Three tiers are flagged, all configurable via `.env`:
 
-- **Zombie license** — active paid seat, zero logins in the past 30 days (`INACTIVITY_THRESHOLD_DAYS=30`)
 - **Terminated employee** — employee status is `Terminated` but subscription remains `Active`
+- **Zombie license** — active paid seat, zero logins in the past N days (`INACTIVITY_THRESHOLD_DAYS=30`)
+- **At-risk license** — active paid seat, 1–4 logins in the past N days (`LOW_USAGE_THRESHOLD=4`)
 
-The inactivity threshold is decoupled from the codebase so business rules can be adjusted without touching any Python.
+Business rules are fully decoupled from the codebase so they can be adjusted without touching Python.
 
 ---
 
@@ -70,6 +78,8 @@ status          monthly_cost         tool_name
 email           license_status       last_login_date
                                      logins_last_30_days
 ```
+
+All joins are validated before commit; orphaned subscription IDs are logged as warnings.
 
 ---
 
@@ -100,16 +110,19 @@ email           license_status       last_login_date
 git clone https://github.com/Yash-BP/subscan-saas-analyzer.git
 cd subscan-saas-analyzer
 
-pip install pandas faker python-dotenv
+pip install -r requirements.txt
 
-python scripts/generate_billing_data.py
-python scripts/setup_db.py
-python scripts/analyze_waste.py
+python scripts/run_pipeline.py
 ```
 
-Output: `data/identified_waste_report.csv` — connect directly to Power BI.
+Optional flags:
 
-To inject the executive views: `python scripts/run_sql.py`
+```bash
+python scripts/run_pipeline.py --skip-gen      # re-run on existing CSVs
+python scripts/run_pipeline.py --only-analyze  # re-run analytics only
+```
+
+Output: `data/identified_waste_report.csv` + `data/dept_rollup.csv` + `data/tool_rollup.csv` — connect directly to Power BI.
 
 ---
 
@@ -118,17 +131,16 @@ To inject the executive views: `python scripts/run_sql.py`
 ```
 subscan-saas-analyzer/
 ├── scripts/
+│   ├── run_pipeline.py            # One-command orchestrator with CLI flags
 │   ├── generate_billing_data.py   # Synthetic dataset with injected anomalies
-│   ├── setup_db.py                # CSV to SQLite ingestion
-│   ├── analyze_waste.py           # Core analytics engine
-│   ├── setup_powerbi_views.sql    # vw_executive_waste_summary + vw_wasted_licenses_detail
-│   └── run_sql.py                 # View injection runner
+│   ├── setup_db.py                # CSV to SQLite with validation + integrity checks
+│   ├── analyze_waste.py           # Core analytics engine, three-tier classifier
+│   └── setup_powerbi_views.sql    # vw_executive_waste_summary + vw_wasted_licenses_detail
 ├── data/
-│   ├── employees.csv
-│   ├── subscriptions.csv
-│   ├── usage_logs.csv
-│   └── identified_waste_report.csv
-├── .env
+│   └── (empty on init — all generated by run_pipeline.py)
+├── .gitignore
+├── requirements.txt
+├── dashboard.png.png
 └── README.md
 ```
 
