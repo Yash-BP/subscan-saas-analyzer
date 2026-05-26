@@ -1,76 +1,104 @@
-sub_id,emp_id,tool_name,monthly_cost,license_status,name,email,department,status,last_login_date,logins_last_30_days,waste_category
-SUB-74178,2824,Tableau,70,Active,Donald Walker,rhodespatricia@garza.com,Finance,Active,2026-01-19,0,Zero Usage in 30 Days (Zombie License)
-SUB-73483,2535,Zoom,20,Active,Jonathan Johnson,jennifermiles@robinson-lawrence.com,Finance,Active,2026-02-06,0,Zero Usage in 30 Days (Zombie License)
-SUB-53573,3615,HubSpot,90,Active,Gina Moore,curtis61@abbott-munoz.com,Marketing,Active,2025-12-20,0,Zero Usage in 30 Days (Zombie License)
-SUB-71993,2169,Zoom,20,Active,Carolyn Daniel,stevennelson@watts.com,Design,Active,2026-02-21,0,Zero Usage in 30 Days (Zombie License)
-SUB-14852,3340,Asana,25,Active,David Hoffman,julie69@cox-osborn.com,HR,Active,2026-02-26,0,Zero Usage in 30 Days (Zombie License)
-SUB-26547,3340,Slack,15,Active,David Hoffman,julie69@cox-osborn.com,HR,Active,2026-01-28,0,Zero Usage in 30 Days (Zombie License)
-SUB-23154,9348,Zoom,20,Active,Peter Callahan Jr.,laurahenderson@cruz.info,HR,Active,2025-12-31,0,Zero Usage in 30 Days (Zombie License)
-SUB-78937,9669,Zoom,20,Active,Juan Dunlap,maldonadoamanda@mack-peterson.com,Finance,Active,2025-12-20,0,Zero Usage in 30 Days (Zombie License)
-SUB-28894,8123,Zoom,20,Active,Aaron Bowen,teresa28@harrell.net,Design,Active,2025-12-22,0,Zero Usage in 30 Days (Zombie License)
-SUB-95823,8123,Figma,45,Active,Aaron Bowen,teresa28@harrell.net,Design,Active,2026-02-19,0,Zero Usage in 30 Days (Zombie License)
-SUB-79942,3705,Slack,15,Active,Shane Henderson,sarahcampos@harris.com,Marketing,Active,2026-01-11,0,Zero Usage in 30 Days (Zombie License)
-SUB-73956,8177,Salesforce,150,Active,Jocelyn Wright,morganbrianna@chapman.com,Sales,Active,2026-02-14,0,Zero Usage in 30 Days (Zombie License)
-SUB-80912,8177,Zoom,20,Active,Jocelyn Wright,morganbrianna@chapman.com,Sales,Active,2026-02-10,0,Zero Usage in 30 Days (Zombie License)
-SUB-14705,1964,Asana,25,Active,Taylor Heath,palmerjoshua@lewis-anderson.org,Marketing,Terminated,2025-12-27,0,Terminated Employee (Wasted License)
-SUB-90931,1964,HubSpot,90,Active,Taylor Heath,palmerjoshua@lewis-anderson.org,Marketing,Terminated,2026-01-15,0,Terminated Employee (Wasted License)
-SUB-18968,1964,Monday.com,30,Active,Taylor Heath,palmerjoshua@lewis-anderson.org,Marketing,Terminated,2025-10-08,0,Terminated Employee (Wasted License)
-SUB-40771,1964,Zoom,20,Active,Taylor Heath,palmerjoshua@lewis-anderson.org,Marketing,Terminated,2026-01-16,0,Terminated Employee (Wasted License)
-SUB-92727,1964,Slack,15,Active,Taylor Heath,palmerjoshua@lewis-anderson.org,Marketing,Terminated,2025-10-26,0,Terminated Employee (Wasted License)
-SUB-99705,1964,Figma,45,Active,Taylor Heath,palmerjoshua@lewis-anderson.org,Marketing,Terminated,2025-11-20,0,Terminated Employee (Wasted License)
-SUB-31805,2612,Figma,45,Active,Nicholas Mcbride,wrightjames@taylor-white.info,Design,Active,2026-02-08,0,Zero Usage in 30 Days (Zombie License)
-SUB-48452,7658,Slack,15,Active,Mr. James Brown,ysmith@house-glover.com,Engineering,Active,2026-02-08,0,Zero Usage in 30 Days (Zombie License)
-SUB-56984,7658,Notion,12,Active,Mr. James Brown,ysmith@house-glover.com,Engineering,Active,2026-01-28,0,Zero Usage in 30 Days (Zombie License)
-SUB-59131,7658,Zoom,20,Active,Mr. James Brown,ysmith@house-glover.com,Engineering,Active,2026-02-05,0,Zero Usage in 30 Days (Zombie License)
-SUB-79621,7930,Zoom,20,Active,Monica Logan,smoore@novak.net,HR,Active,2025-12-29,0,Zero Usage in 30 Days (Zombie License)
-SUB-20350,7615,Slack,15,Active,Steve Sanchez,harveyrobert@cunningham.com,Sales,Active,2026-02-13,0,Zero Usage in 30 Days (Zombie License)
-SUB-89887,7615,Salesforce,150,Active,Steve Sanchez,harveyrobert@cunningham.com,Sales,Active,2026-01-25,0,Zero Usage in 30 Days (Zombie License)
-SUB-70981,7939,HubSpot,90,Active,Amanda Cook,danagreen@ramos.com,Sales,Terminated,2025-11-25,0,Terminated Employee (Wasted License)
-SUB-47700,7939,Slack,15,Active,Amanda Cook,danagreen@ramos.com,Sales,Terminated,2025-11-30,0,Terminated Employee (Wasted License)
-SUB-98815,7939,Salesforce,150,Active,Amanda Cook,danagreen@ramos.com,Sales,Terminated,2025-10-20,0,Terminated Employee (Wasted License)
-SUB-81643,7939,Zoom,20,Active,Amanda Cook,danagreen@ramos.com,Sales,Terminated,2025-10-06,0,Terminated Employee (Wasted License)
-SUB-30706,2232,Asana,25,Active,Melissa Hernandez,davenportbrandi@jordan.com,Marketing,Active,2026-02-06,0,Zero Usage in 30 Days (Zombie License)
-SUB-49599,6974,Figma,45,Active,Rebecca Valencia,jason31@deleon-henson.biz,Design,Active,2026-02-14,0,Zero Usage in 30 Days (Zombie License)
-SUB-23979,3532,Zoom,20,Active,Cynthia Martin,nicolejohnson@middleton.com,Finance,Active,2026-01-18,0,Zero Usage in 30 Days (Zombie License)
-SUB-41091,5371,Asana,25,Active,Michael Reyes,garrisonjeffrey@bailey-hoover.com,Marketing,Active,2026-01-02,0,Zero Usage in 30 Days (Zombie License)
-SUB-57049,5371,Zoom,20,Active,Michael Reyes,garrisonjeffrey@bailey-hoover.com,Marketing,Active,2025-12-29,0,Zero Usage in 30 Days (Zombie License)
-SUB-99889,1452,Asana,25,Active,Wesley White,benjamin96@chandler-edwards.org,Finance,Terminated,2025-12-07,0,Terminated Employee (Wasted License)
-SUB-16428,1452,Slack,15,Active,Wesley White,benjamin96@chandler-edwards.org,Finance,Terminated,2026-01-22,0,Terminated Employee (Wasted License)
-SUB-89482,1452,Zoom,20,Active,Wesley White,benjamin96@chandler-edwards.org,Finance,Terminated,2026-01-03,0,Terminated Employee (Wasted License)
-SUB-47512,9379,Slack,15,Active,Steven Lee,fletcheraaron@mcdaniel.com,Finance,Active,2026-01-10,0,Zero Usage in 30 Days (Zombie License)
-SUB-91381,3085,Asana,25,Active,Maurice Gray,christinaturner@bass.org,Finance,Active,2025-12-21,0,Zero Usage in 30 Days (Zombie License)
-SUB-96400,3085,Zoom,20,Active,Maurice Gray,christinaturner@bass.org,Finance,Active,2026-02-04,0,Zero Usage in 30 Days (Zombie License)
-SUB-21813,2193,Slack,15,Active,Stephen Johnston,psnyder@douglas.com,Marketing,Active,2026-02-14,0,Zero Usage in 30 Days (Zombie License)
-SUB-48684,6502,Asana,25,Active,Joshua Taylor,patrickhernandez@brown.com,Marketing,Terminated,2025-12-25,0,Terminated Employee (Wasted License)
-SUB-54396,6502,HubSpot,90,Active,Joshua Taylor,patrickhernandez@brown.com,Marketing,Terminated,2025-10-09,0,Terminated Employee (Wasted License)
-SUB-25095,6502,Monday.com,30,Active,Joshua Taylor,patrickhernandez@brown.com,Marketing,Terminated,2025-12-03,0,Terminated Employee (Wasted License)
-SUB-71385,6502,Zoom,20,Active,Joshua Taylor,patrickhernandez@brown.com,Marketing,Terminated,2025-12-29,0,Terminated Employee (Wasted License)
-SUB-19869,6502,Slack,15,Active,Joshua Taylor,patrickhernandez@brown.com,Marketing,Terminated,2025-10-25,0,Terminated Employee (Wasted License)
-SUB-28449,6502,Figma,45,Active,Joshua Taylor,patrickhernandez@brown.com,Marketing,Terminated,2025-12-01,0,Terminated Employee (Wasted License)
-SUB-59941,5558,Salesforce,150,Active,Sandra King,ruizkaitlyn@cooke.com,Sales,Active,2026-02-03,0,Zero Usage in 30 Days (Zombie License)
-SUB-91205,4571,Zoom,20,Active,David Wood,stricklandfrank@rodriguez-johnson.com,Sales,Active,2025-12-28,0,Zero Usage in 30 Days (Zombie License)
-SUB-93283,6688,Adobe CC,80,Active,Mary Jones,alexander67@hamilton.info,Design,Active,2026-01-20,0,Zero Usage in 30 Days (Zombie License)
-SUB-70852,6688,Zoom,20,Active,Mary Jones,alexander67@hamilton.info,Design,Active,2026-01-04,0,Zero Usage in 30 Days (Zombie License)
-SUB-64935,4937,Zoom,20,Active,Maria Henry,davisjeffrey@sanchez.net,Marketing,Active,2026-01-24,0,Zero Usage in 30 Days (Zombie License)
-SUB-58566,2958,Slack,15,Active,Tiffany Vaughn,javierwashington@lawrence.com,Design,Active,2026-02-27,0,Zero Usage in 30 Days (Zombie License)
-SUB-23022,4180,Figma,45,Active,Isaac Turner,joshuamccann@carter.info,Design,Active,2025-12-27,0,Zero Usage in 30 Days (Zombie License)
-SUB-99873,2680,Asana,25,Active,Laura Harrison,dpeterson@everett-woods.com,HR,Active,2026-01-28,0,Zero Usage in 30 Days (Zombie License)
-SUB-57012,7565,Slack,15,Active,Kenneth Parks Jr.,christopher31@duran.com,Engineering,Active,2026-02-08,0,Zero Usage in 30 Days (Zombie License)
-SUB-46160,9561,Asana,25,Active,Terry Evans,ntorres@lynch.com,Engineering,Active,2026-01-27,0,Zero Usage in 30 Days (Zombie License)
-SUB-96870,4404,Slack,15,Active,Deborah Miller,glennjones@ortiz.org,HR,Active,2025-12-25,0,Zero Usage in 30 Days (Zombie License)
-SUB-93819,8699,Slack,15,Active,David Mann,ojones@french-weber.com,Finance,Active,2026-01-01,0,Zero Usage in 30 Days (Zombie License)
-SUB-53713,2880,Slack,15,Active,Maria Kerr,charlesmartin@larson-holloway.com,Sales,Active,2026-01-28,0,Zero Usage in 30 Days (Zombie License)
-SUB-82641,8195,Slack,15,Active,Michael Lyons,vincent77@george.com,Design,Active,2026-01-02,0,Zero Usage in 30 Days (Zombie License)
-SUB-53064,5102,Zoom,20,Active,Darryl Craig,keyemily@johnston-hines.com,Finance,Active,2025-12-21,0,Zero Usage in 30 Days (Zombie License)
-SUB-29340,8708,HubSpot,90,Active,Jessica Ramirez,fwalters@harrison.com,Sales,Terminated,2025-12-12,0,Terminated Employee (Wasted License)
-SUB-88116,8708,Slack,15,Active,Jessica Ramirez,fwalters@harrison.com,Sales,Terminated,2025-12-20,0,Terminated Employee (Wasted License)
-SUB-10371,8708,Salesforce,150,Active,Jessica Ramirez,fwalters@harrison.com,Sales,Terminated,2025-11-10,0,Terminated Employee (Wasted License)
-SUB-46342,8708,Zoom,20,Active,Jessica Ramirez,fwalters@harrison.com,Sales,Terminated,2025-10-30,0,Terminated Employee (Wasted License)
-SUB-28964,6260,Asana,25,Active,Shannon Rivera,zroberts@johnson.com,Marketing,Active,2025-12-27,0,Zero Usage in 30 Days (Zombie License)
-SUB-27038,6260,HubSpot,90,Active,Shannon Rivera,zroberts@johnson.com,Marketing,Active,2026-02-23,0,Zero Usage in 30 Days (Zombie License)
-SUB-42853,6260,Zoom,20,Active,Shannon Rivera,zroberts@johnson.com,Marketing,Active,2026-02-16,0,Zero Usage in 30 Days (Zombie License)
-SUB-41186,4335,Slack,15,Active,Carlos Roberts,omartinez@lloyd.com,Sales,Active,2026-02-09,0,Zero Usage in 30 Days (Zombie License)
-SUB-44782,7684,Tableau,70,Active,Willie Durham,pvalentine@jimenez.com,HR,Active,2026-01-20,0,Zero Usage in 30 Days (Zombie License)
-SUB-65176,9337,HubSpot,90,Active,Jennifer Olson,jsanchez@reyes.net,Marketing,Active,2025-12-28,0,Zero Usage in 30 Days (Zombie License)
-SUB-18330,9337,Slack,15,Active,Jennifer Olson,jsanchez@reyes.net,Marketing,Active,2026-01-08,0,Zero Usage in 30 Days (Zombie License)
-SUB-68756,3236,Asana,25,Active,Desiree Tyler,ymorgan@adams.org,Marketing,Active,2025-12-26,0,Zero Usage in 30 Days (Zombie License)
+sub_id,emp_id,tool_name,monthly_cost,license_status,name,email,department,emp_status,last_login_date,logins_last_30_days,waste_category,annual_waste
+SUB-42742,1409,Slack,15,Active,Aryan Maharaj,udantdewan@chaudry.com,Finance,Active,2026-04-28,1,Low Usage (At-Risk License),180
+SUB-40982,1409,Asana,25,Active,Aryan Maharaj,udantdewan@chaudry.com,Finance,Active,2026-02-16,0,Zero Usage in 30 Days (Zombie License),300
+SUB-59672,4657,Slack,15,Active,Girik Kamdar,yashasvibala@issac.info,Marketing,Active,2026-03-01,0,Zero Usage in 30 Days (Zombie License),180
+SUB-51104,4657,HubSpot,90,Active,Girik Kamdar,yashasvibala@issac.info,Marketing,Active,2026-02-04,0,Zero Usage in 30 Days (Zombie License),1080
+SUB-76562,9935,Slack,15,Active,Abeer Dutta,roak@kale.com,Engineering,Active,2026-03-27,0,Zero Usage in 30 Days (Zombie License),180
+SUB-44664,1520,GitHub,21,Active,Lajita Chatterjee,hemangini94@sharaf.com,Engineering,Active,2026-04-06,0,Zero Usage in 30 Days (Zombie License),252
+SUB-66057,4257,Zoom,20,Active,Lajita Mall,kpatla@pant-kadakia.com,Finance,Active,2026-05-11,1,Low Usage (At-Risk License),240
+SUB-33206,9928,Figma,45,Active,Onveer Walla,nihalshere@madan-kanda.com,Design,Active,2026-05-05,4,Low Usage (At-Risk License),540
+SUB-24168,9928,Notion,12,Active,Onveer Walla,nihalshere@madan-kanda.com,Design,Active,2026-04-30,2,Low Usage (At-Risk License),144
+SUB-39219,5557,Zoom,20,Active,Veer Balay,nandini41@murty.info,Engineering,Active,2026-03-26,0,Zero Usage in 30 Days (Zombie License),240
+SUB-13617,5557,Jira,10,Active,Veer Balay,nandini41@murty.info,Engineering,Active,2026-03-17,0,Zero Usage in 30 Days (Zombie License),120
+SUB-66531,3615,Tableau,70,Active,Tara Dhar,liam38@lall.com,Finance,Active,2026-01-24,0,Zero Usage in 30 Days (Zombie License),840
+SUB-82667,5552,Asana,25,Active,Lakshit Upadhyay,wchand@choudhary.com,Marketing,Active,2026-02-25,0,Zero Usage in 30 Days (Zombie License),300
+SUB-63225,5552,HubSpot,90,Active,Lakshit Upadhyay,wchand@choudhary.com,Marketing,Active,2026-05-06,2,Low Usage (At-Risk License),1080
+SUB-96356,6514,Zoom,20,Active,Devansh Rajan,hsidhu@apte-contractor.net,Engineering,Active,2026-02-13,0,Zero Usage in 30 Days (Zombie License),240
+SUB-28136,5333,GitHub,21,Active,Chanchal Tripathi,michaelprakash@zacharia.com,Engineering,Active,2026-03-01,0,Zero Usage in 30 Days (Zombie License),252
+SUB-30028,9785,Slack,15,Active,Vrinda Bahl,patildamyanti@bhardwaj.org,Engineering,Active,2026-05-02,3,Low Usage (At-Risk License),180
+SUB-81121,9785,Zoom,20,Active,Vrinda Bahl,patildamyanti@bhardwaj.org,Engineering,Active,2026-05-02,4,Low Usage (At-Risk License),240
+SUB-86556,9785,Asana,25,Active,Vrinda Bahl,patildamyanti@bhardwaj.org,Engineering,Active,2026-04-27,4,Low Usage (At-Risk License),300
+SUB-72518,9785,Notion,12,Active,Vrinda Bahl,patildamyanti@bhardwaj.org,Engineering,Active,2026-03-05,0,Zero Usage in 30 Days (Zombie License),144
+SUB-45774,7201,Slack,15,Active,Frederick Sunder,waliajeremiah@soman.com,Engineering,Active,2026-05-05,4,Low Usage (At-Risk License),180
+SUB-65255,7201,GitHub,21,Active,Frederick Sunder,waliajeremiah@soman.com,Engineering,Active,2026-05-15,1,Low Usage (At-Risk License),252
+SUB-55870,6925,Slack,15,Active,Pallavi Kakar,devikarastogi@prakash.info,HR,Active,2026-04-25,1,Low Usage (At-Risk License),180
+SUB-41266,6925,Asana,25,Active,Pallavi Kakar,devikarastogi@prakash.info,HR,Active,2026-01-24,0,Zero Usage in 30 Days (Zombie License),300
+SUB-50768,2139,Asana,25,Active,Yug Kar,nigamansh@karpe.com,Engineering,Active,2026-04-16,0,Zero Usage in 30 Days (Zombie License),300
+SUB-35995,2139,Jira,10,Active,Yug Kar,nigamansh@karpe.com,Engineering,Active,2026-01-21,0,Zero Usage in 30 Days (Zombie License),120
+SUB-67080,5741,Notion,12,Active,Veer Bir,narayananekavir@khanna.com,Engineering,Active,2026-02-12,0,Zero Usage in 30 Days (Zombie License),144
+SUB-42177,2654,Slack,15,Active,Urvashi Kibe,mray@chatterjee.biz,Design,Active,2026-05-01,2,Low Usage (At-Risk License),180
+SUB-68743,6977,Zoom,20,Active,Pallavi Roy,rbhagat@chaudhari.com,Marketing,Active,2026-05-08,4,Low Usage (At-Risk License),240
+SUB-49618,4432,Asana,25,Active,Yuvraj Handa,saumyadey@goswami-mallick.info,Finance,Active,2026-02-10,0,Zero Usage in 30 Days (Zombie License),300
+SUB-83772,9751,Zoom,20,Active,Vasana Kala,kbhargava@agate-ramakrishnan.com,Finance,Active,2026-05-08,1,Low Usage (At-Risk License),240
+SUB-87832,8573,Adobe CC,80,Active,Bhavika Sampath,mdubey@kalla-bhardwaj.org,Design,Active,2026-05-06,3,Low Usage (At-Risk License),960
+SUB-69510,8573,Notion,12,Active,Bhavika Sampath,mdubey@kalla-bhardwaj.org,Design,Active,2026-03-21,0,Zero Usage in 30 Days (Zombie License),144
+SUB-19359,4598,Asana,25,Active,Dipta Bhandari,soodyadavi@dugar.com,Finance,Active,2026-03-11,0,Zero Usage in 30 Days (Zombie License),300
+SUB-52247,1916,Asana,25,Active,Ekapad Bir,netradar@koshy.biz,Marketing,Active,2026-05-08,1,Low Usage (At-Risk License),300
+SUB-73532,4456,Zoom,20,Active,Aditya Shanker,borahtanay@lanka.com,HR,Active,2026-01-29,0,Zero Usage in 30 Days (Zombie License),240
+SUB-11792,6155,Slack,15,Active,Kala Mane,rakshamittal@wadhwa.com,Marketing,Active,2026-05-12,4,Low Usage (At-Risk License),180
+SUB-76550,6155,Figma,45,Active,Kala Mane,rakshamittal@wadhwa.com,Marketing,Active,2026-05-06,4,Low Usage (At-Risk License),540
+SUB-14852,5339,Zoom,20,Active,Yashasvi Suresh,charan16@basu-aggarwal.com,Marketing,Active,2026-02-03,0,Zero Usage in 30 Days (Zombie License),240
+SUB-78937,5339,Monday.com,30,Active,Yashasvi Suresh,charan16@basu-aggarwal.com,Marketing,Active,2026-05-11,4,Low Usage (At-Risk License),360
+SUB-95823,5339,HubSpot,90,Active,Yashasvi Suresh,charan16@basu-aggarwal.com,Marketing,Active,2026-05-07,3,Low Usage (At-Risk License),1080
+SUB-21846,9830,Salesforce,150,Active,Adweta Edwin,jsane@choudhury.com,Sales,Active,2026-04-25,1,Low Usage (At-Risk License),1800
+SUB-68153,9830,HubSpot,90,Active,Adweta Edwin,jsane@choudhury.com,Sales,Active,2026-03-12,0,Zero Usage in 30 Days (Zombie License),1080
+SUB-16028,8019,Slack,15,Active,Kala Divan,cdatta@patla-baral.com,HR,Active,2026-05-04,3,Low Usage (At-Risk License),180
+SUB-66450,8019,Zoom,20,Active,Kala Divan,cdatta@patla-baral.com,HR,Active,2026-02-11,0,Zero Usage in 30 Days (Zombie License),240
+SUB-86435,4593,Zoom,20,Active,Zaid Chauhan,niharika92@gaba.biz,Marketing,Active,2026-02-19,0,Zero Usage in 30 Days (Zombie License),240
+SUB-27224,3504,Slack,15,Active,Tristan Iyengar,tpalla@kapoor.com,Finance,Active,2026-03-13,0,Zero Usage in 30 Days (Zombie License),180
+SUB-19869,7916,Slack,15,Active,Falguni Mallick,mallickindali@upadhyay.com,HR,Active,2026-03-22,0,Zero Usage in 30 Days (Zombie License),180
+SUB-21836,7916,Asana,25,Active,Falguni Mallick,mallickindali@upadhyay.com,HR,Active,2026-04-28,1,Low Usage (At-Risk License),300
+SUB-98188,7252,Slack,15,Active,Jack Lal,alkabarad@saraf.com,HR,Terminated,2026-01-28,0,Terminated Employee (Wasted License),180
+SUB-86619,7252,Zoom,20,Active,Jack Lal,alkabarad@saraf.com,HR,Terminated,2025-12-29,0,Terminated Employee (Wasted License),240
+SUB-93695,7252,Asana,25,Active,Jack Lal,alkabarad@saraf.com,HR,Terminated,2025-12-31,0,Terminated Employee (Wasted License),300
+SUB-89964,9669,Zoom,20,Active,Yasti D’Alia,qgupta@sarin.net,Sales,Active,2026-05-01,3,Low Usage (At-Risk License),240
+SUB-74569,9669,HubSpot,90,Active,Yasti D’Alia,qgupta@sarin.net,Sales,Active,2026-03-20,0,Zero Usage in 30 Days (Zombie License),1080
+SUB-27275,6573,Notion,12,Active,Daksha Mangat,qushinagy@sathe-sathe.com,Engineering,Active,2026-03-20,0,Zero Usage in 30 Days (Zombie License),144
+SUB-57453,3591,Slack,15,Active,Omkaar Chad,yutika95@keer.com,Design,Active,2026-04-29,2,Low Usage (At-Risk License),180
+SUB-90623,3591,Zoom,20,Active,Omkaar Chad,yutika95@keer.com,Design,Active,2026-01-25,0,Zero Usage in 30 Days (Zombie License),240
+SUB-68138,3591,Notion,12,Active,Omkaar Chad,yutika95@keer.com,Design,Active,2026-04-09,0,Zero Usage in 30 Days (Zombie License),144
+SUB-29442,5315,Slack,15,Active,Rushil Din,batrayash@bora-shah.biz,HR,Terminated,2026-03-20,0,Terminated Employee (Wasted License),180
+SUB-26540,5315,Zoom,20,Active,Rushil Din,batrayash@bora-shah.biz,HR,Terminated,2026-01-25,0,Terminated Employee (Wasted License),240
+SUB-91830,5315,Asana,25,Active,Rushil Din,batrayash@bora-shah.biz,HR,Terminated,2026-01-12,0,Terminated Employee (Wasted License),300
+SUB-18799,9317,GitHub,21,Active,Leena Talwar,jkohli@ahluwalia.com,Engineering,Active,2026-04-09,0,Zero Usage in 30 Days (Zombie License),252
+SUB-88696,5889,Tableau,70,Active,Zarna Shetty,krishjairaj@deol-shetty.net,Finance,Active,2026-04-29,2,Low Usage (At-Risk License),840
+SUB-92991,3646,Slack,15,Active,Vedhika Khare,ria14@magar.com,HR,Active,2026-04-29,2,Low Usage (At-Risk License),180
+SUB-30392,3646,Tableau,70,Active,Vedhika Khare,ria14@magar.com,HR,Active,2026-01-30,0,Zero Usage in 30 Days (Zombie License),840
+SUB-47938,9689,GitHub,21,Active,Lakshit Dora,leeladua@kala.biz,Engineering,Active,2026-05-02,2,Low Usage (At-Risk License),252
+SUB-97562,9005,Zoom,20,Active,Unnati Sagar,jhaveriosha@bahri-rai.info,Engineering,Active,2026-05-14,4,Low Usage (At-Risk License),240
+SUB-12456,9005,Asana,25,Active,Unnati Sagar,jhaveriosha@bahri-rai.info,Engineering,Active,2026-05-05,4,Low Usage (At-Risk License),300
+SUB-63088,9005,Jira,10,Active,Unnati Sagar,jhaveriosha@bahri-rai.info,Engineering,Active,2026-03-09,0,Zero Usage in 30 Days (Zombie License),120
+SUB-53655,6947,Salesforce,150,Active,Indira Misra,isaini@kannan.com,Sales,Active,2026-04-25,1,Low Usage (At-Risk License),1800
+SUB-35856,4946,Zoom,20,Active,Vedika Balakrishnan,qnayar@ravel.com,HR,Active,2026-03-31,0,Zero Usage in 30 Days (Zombie License),240
+SUB-95918,4946,Asana,25,Active,Vedika Balakrishnan,qnayar@ravel.com,HR,Active,2026-01-29,0,Zero Usage in 30 Days (Zombie License),300
+SUB-87518,2403,Asana,25,Active,Meera Bala,sanghakrishna@gopal-bedi.com,Finance,Active,2026-02-14,0,Zero Usage in 30 Days (Zombie License),300
+SUB-76132,3103,Zoom,20,Active,Upma Bahl,pallaudarsh@biswas.com,Finance,Active,2026-05-01,4,Low Usage (At-Risk License),240
+SUB-77286,8397,Slack,15,Active,Radhika Goda,veda76@loyal.com,Engineering,Active,2026-02-23,0,Zero Usage in 30 Days (Zombie License),180
+SUB-75513,4770,Slack,15,Active,Simon Pant,harini49@majumdar.com,HR,Terminated,2026-04-01,0,Terminated Employee (Wasted License),180
+SUB-92831,4770,Zoom,20,Active,Simon Pant,harini49@majumdar.com,HR,Terminated,2025-11-25,0,Terminated Employee (Wasted License),240
+SUB-85372,4770,Asana,25,Active,Simon Pant,harini49@majumdar.com,HR,Terminated,2026-02-03,0,Terminated Employee (Wasted License),300
+SUB-28818,4770,Tableau,70,Active,Simon Pant,harini49@majumdar.com,HR,Terminated,2026-01-21,0,Terminated Employee (Wasted License),840
+SUB-78614,2163,Zoom,20,Active,Wyatt Ray,skhosla@swaminathan-sem.com,Finance,Active,2026-04-29,1,Low Usage (At-Risk License),240
+SUB-61177,2163,Asana,25,Active,Wyatt Ray,skhosla@swaminathan-sem.com,Finance,Active,2026-05-03,3,Low Usage (At-Risk License),300
+SUB-14847,4750,Notion,12,Active,Chaitaly Kant,tkohli@pillay.com,Engineering,Active,2026-05-09,1,Low Usage (At-Risk License),144
+SUB-43202,4750,GitHub,21,Active,Chaitaly Kant,tkohli@pillay.com,Engineering,Active,2026-01-27,0,Zero Usage in 30 Days (Zombie License),252
+SUB-45811,6413,Zoom,20,Active,Ganga Pandey,tmadan@kashyap-dara.com,Engineering,Active,2026-03-03,0,Zero Usage in 30 Days (Zombie License),240
+SUB-20828,6413,Jira,10,Active,Ganga Pandey,tmadan@kashyap-dara.com,Engineering,Active,2026-04-26,2,Low Usage (At-Risk License),120
+SUB-81496,6413,GitHub,21,Active,Ganga Pandey,tmadan@kashyap-dara.com,Engineering,Active,2026-05-05,3,Low Usage (At-Risk License),252
+SUB-68606,5562,Zoom,20,Active,Jagdish Wason,rehaankalita@sule.org,Finance,Active,2026-03-05,0,Zero Usage in 30 Days (Zombie License),240
+SUB-26545,9834,Zoom,20,Active,Harish Hari,utkarsh52@atwal-walla.com,Marketing,Active,2026-01-27,0,Zero Usage in 30 Days (Zombie License),240
+SUB-85225,9834,HubSpot,90,Active,Harish Hari,utkarsh52@atwal-walla.com,Marketing,Active,2026-03-04,0,Zero Usage in 30 Days (Zombie License),1080
+SUB-97535,8744,HubSpot,90,Active,Chakradev Bhagat,jonathan71@mane.info,Marketing,Active,2026-04-28,3,Low Usage (At-Risk License),1080
+SUB-74752,7669,Zoom,20,Active,Harini Gour,krishnanvanya@bhattacharyya.info,Marketing,Active,2026-02-08,0,Zero Usage in 30 Days (Zombie License),240
+SUB-90209,7669,Monday.com,30,Active,Harini Gour,krishnanvanya@bhattacharyya.info,Marketing,Active,2026-05-03,4,Low Usage (At-Risk License),360
+SUB-13718,8651,Tableau,70,Active,Lajita Seshadri,lmishra@mody-bhasin.org,Finance,Active,2026-01-27,0,Zero Usage in 30 Days (Zombie License),840
+SUB-85598,2612,Slack,15,Active,Sarthak Kakar,finn23@borde.com,Engineering,Terminated,2026-01-28,0,Terminated Employee (Wasted License),180
+SUB-95344,2612,Zoom,20,Active,Sarthak Kakar,finn23@borde.com,Engineering,Terminated,2026-02-11,0,Terminated Employee (Wasted License),240
+SUB-84991,2612,Asana,25,Active,Sarthak Kakar,finn23@borde.com,Engineering,Terminated,2025-12-20,0,Terminated Employee (Wasted License),300
+SUB-91016,2612,Notion,12,Active,Sarthak Kakar,finn23@borde.com,Engineering,Terminated,2026-03-29,0,Terminated Employee (Wasted License),144
+SUB-75278,2612,Jira,10,Active,Sarthak Kakar,finn23@borde.com,Engineering,Terminated,2026-01-21,0,Terminated Employee (Wasted License),120
+SUB-94136,2612,GitHub,21,Active,Sarthak Kakar,finn23@borde.com,Engineering,Terminated,2026-01-18,0,Terminated Employee (Wasted License),252
+SUB-69446,6559,Zoom,20,Active,Shravya Singhal,bachittar34@mandal.com,Engineering,Active,2026-04-12,0,Zero Usage in 30 Days (Zombie License),240
+SUB-89516,6559,Notion,12,Active,Shravya Singhal,bachittar34@mandal.com,Engineering,Active,2026-03-10,0,Zero Usage in 30 Days (Zombie License),144
+SUB-83616,6559,GitHub,21,Active,Shravya Singhal,bachittar34@mandal.com,Engineering,Active,2026-03-20,0,Zero Usage in 30 Days (Zombie License),252
+SUB-86460,7912,Asana,25,Active,Damyanti Mani,ddash@modi.net,Marketing,Active,2026-04-30,4,Low Usage (At-Risk License),300
