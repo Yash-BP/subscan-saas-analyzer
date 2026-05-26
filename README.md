@@ -128,7 +128,7 @@ subscan-saas-analyzer/
 │   ├── subscriptions.csv
 │   ├── usage_logs.csv
 │   └── identified_waste_report.csv
-├── .env.example
+├── .env
 └── README.md
 ```
 
