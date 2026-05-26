@@ -18,3 +18,7 @@ data/*.db
 
 # Reports and artifacts
 *.db
+
+# Databases
+*.db
+data/*.db
