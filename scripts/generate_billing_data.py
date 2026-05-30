@@ -1,232 +1,252 @@
 """
-generate_billing_data.py
-────────────────────────
-Generates a realistic, reproducible multi-table SaaS billing dataset for
-SubScan analysis. Improvements over v1:
+generate_billing_data.py  (Phase 1 Upgrade)
+────────────────────────────────────────────
+Builds all four CSV files that SubScan needs:
+  - employees.csv
+  - subscriptions.csv
+  - usage_logs.csv          (unchanged — single snapshot, still used by existing views)
+  - historical_usage_logs.csv  ← NEW: 12 months per subscription for cohort analysis
 
-  • Config-driven via dataclasses — no magic numbers scattered in logic
-  • Richer anomaly injection: duplicate tools, over-licensed departments,
-    terminated-but-not-offboarded staff, and partial-usage ghosts
-  • Precise random seeding on a local Random instance — doesn't pollute
-    the global random state
-  • Typed DataFrames with explicit dtypes on export for clean SQLite ingestion
-  • Structured console output with per-step summaries
+January Cohort Anomaly (intentional, for recruiter to spot):
+  Employees whose subscription started in January use Salesforce heavily for
+  the first two months, then 40% of them drop to 0 logins from month 3 onward.
+  This simulates "feature adoption stagnation."
 """
 
 import os
 import random
-import logging
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Dict, List
+from datetime import date, timedelta
 
 import pandas as pd
 from faker import Faker
 
-# ── Configuration ─────────────────────────────────────────────────────────────
+# ── Reproducible output ───────────────────────────────────────────────────────
+SEED = 42
+random.seed(SEED)
+fake = Faker()
+Faker.seed(SEED)
 
-@dataclass
-class DataConfig:
-    seed: int = 42
-    num_employees: int = 75
-    terminated_rate: float = 0.08          # 8% of workforce terminated
-    zombie_rate: float = 0.18              # 18% of active subs go unused
-    partial_usage_rate: float = 0.12       # 12% low-usage (1-4 logins) — new category
-    inactivity_days_min: int = 31
-    inactivity_days_max: int = 120
-    active_days_min: int = 0
-    active_days_max: int = 8
-    output_dir: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
+# ── Constants ─────────────────────────────────────────────────────────────────
+NUM_EMPLOYEES  = 75
+DEPARTMENTS    = ["Engineering", "Sales", "Marketing", "HR", "Finance", "Operations"]
 
-    # SaaS catalogue: tool → monthly_cost_per_seat (INR analogue in USD)
-    saas_catalogue: Dict[str, int] = field(default_factory=lambda: {
-        "Slack": 15,
-        "Zoom": 20,
-        "Notion": 12,
-        "Asana": 25,
-        "Monday.com": 30,
-        "Figma": 45,
-        "Tableau": 70,
-        "Salesforce": 150,
-        "HubSpot": 90,
-        "Adobe CC": 80,
-        "Jira": 10,          # New tool — common in engineering
-        "GitHub": 21,        # New tool — common in engineering
-    })
+# Tools with their monthly cost per seat
+TOOLS = {
+    "Salesforce":  45,
+    "HubSpot":     50,
+    "Slack":       8,
+    "Asana":       12,
+    "Jira":        10,
+    "Zoom":        15,
+    "Tableau":     70,
+    "Monday.com":  14,
+    "Notion":      8,
+    "Workday":     40,
+}
 
-    departments: List[str] = field(default_factory=lambda: [
-        "Engineering", "Marketing", "Sales", "Design", "HR", "Finance"
-    ])
+# Which departments get which tools (realistic allocation)
+DEPT_TOOLS = {
+    "Engineering":  ["Jira", "Slack", "Zoom", "Notion"],
+    "Sales":        ["Salesforce", "HubSpot", "Slack", "Zoom"],
+    "Marketing":    ["HubSpot", "Asana", "Monday.com", "Slack"],  # Both PM tools — intentional waste
+    "HR":           ["Workday", "Slack", "Tableau"],               # Tableau in HR — intentional waste
+    "Finance":      ["Workday", "Tableau", "Slack"],
+    "Operations":   ["Asana", "Slack", "Zoom", "Notion"],
+}
 
-    # Maps department → tools that department should get
-    dept_tool_map: Dict[str, List[str]] = field(default_factory=lambda: {
-        "Engineering": ["Slack", "Zoom", "Asana", "Notion", "Jira", "GitHub"],
-        "Marketing":   ["Slack", "Zoom", "Asana", "Monday.com", "HubSpot", "Figma"],
-        "Sales":       ["Slack", "Zoom", "Salesforce", "HubSpot"],
-        "Design":      ["Slack", "Zoom", "Figma", "Adobe CC", "Notion"],
-        "HR":          ["Slack", "Zoom", "Asana"],
-        "Finance":     ["Slack", "Zoom", "Asana", "Tableau"],
-    })
+# How many months back to generate cohorts (one cohort = one calendar month)
+HISTORY_MONTHS = 12
 
-    # Departments that sometimes get an expensive tool they don't need
-    tableau_bonus_depts: List[str] = field(default_factory=lambda: ["HR", "Finance"])
-    tableau_bonus_prob: float = 0.30  # 30% chance Finance/HR gets Tableau
 
-# ── Logging ───────────────────────────────────────────────────────────────────
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s  %(levelname)-8s  %(message)s",
-    datefmt="%H:%M:%S",
-)
-log = logging.getLogger("subscan.generate")
+def months_back(n: int) -> date:
+    """Return the first day of the month that is n months before today."""
+    today = date.today()
+    month = today.month - n
+    year  = today.year + (month - 1) // 12
+    month = ((month - 1) % 12) + 1
+    return date(year, month, 1)
 
-# ── Generator ─────────────────────────────────────────────────────────────────
 
-def generate(cfg: DataConfig) -> None:
-    rng = random.Random(cfg.seed)
-    fake = Faker("en_IN")
-    Faker.seed(cfg.seed)
+def add_months(d: date, n: int) -> date:
+    """Add n months to a date, returning the first of that month."""
+    month = d.month + n
+    year  = d.year + (month - 1) // 12
+    month = ((month - 1) % 12) + 1
+    return date(year, month, 1)
 
-    today = datetime.today()
-    os.makedirs(cfg.output_dir, exist_ok=True)
 
-    # ── 1. Employees ──────────────────────────────────────────────────────────
-    log.info("Generating %d employees …", cfg.num_employees)
-    employees = []
-    for _ in range(cfg.num_employees):
-        status = (
-            "Terminated"
-            if rng.random() < cfg.terminated_rate
-            else "Active"
-        )
-        employees.append({
-            "emp_id":     rng.randint(1000, 9999),
-            "name":       fake.unique.name(),
-            "email":      fake.company_email(),
-            "department": rng.choice(cfg.departments),
+# ── Generation ────────────────────────────────────────────────────────────────
+
+def generate_employees() -> pd.DataFrame:
+    rows = []
+    for i in range(1, NUM_EMPLOYEES + 1):
+        dept   = random.choice(DEPARTMENTS)
+        # ~10% terminated employees (intentional waste anomaly)
+        status = "Terminated" if random.random() < 0.10 else "Active"
+        rows.append({
+            "emp_id":     f"E{i:03d}",
+            "name":       fake.name(),
+            "email":      fake.email(),
+            "department": dept,
             "status":     status,
         })
+    return pd.DataFrame(rows)
 
-    df_employees = pd.DataFrame(employees).astype({
-        "emp_id":     "int64",
-        "name":       "string",
-        "email":      "string",
-        "department": "string",
-        "status":     "string",
-    })
 
-    terminated = (df_employees["status"] == "Terminated").sum()
-    log.info("  Active: %d  |  Terminated: %d", len(df_employees) - terminated, terminated)
+def generate_subscriptions(df_emp: pd.DataFrame) -> pd.DataFrame:
+    """
+    Each employee gets all tools assigned to their department.
+    Returns a DataFrame of all subscriptions and the cohort start month per row.
+    """
+    rows = []
+    sub_id = 1
 
-    # ── 2. Subscriptions + Usage Logs ─────────────────────────────────────────
-    log.info("Assigning subscriptions and generating usage logs …")
-
-    subscriptions, usage_logs = [], []
-    used_sub_ids: set = set()
-
-    def unique_sub_id() -> str:
-        while True:
-            sid = f"SUB-{rng.randint(10000, 99999)}"
-            if sid not in used_sub_ids:
-                used_sub_ids.add(sid)
-                return sid
-
-    anomaly_counts = {"zombie": 0, "terminated": 0, "partial": 0, "duplicate_tool": 0}
-
-    for _, emp in df_employees.iterrows():
-        tools = list(cfg.dept_tool_map.get(emp["department"], ["Slack", "Zoom"]))
-
-        # Anomaly: duplicate tool overlap for Marketing (Asana + Monday.com both assigned)
-        # — already in the dept_tool_map, intentional.
-
-        # Anomaly: occasionally give Tableau to HR/Finance employees (over-licensing)
-        if emp["department"] in cfg.tableau_bonus_depts:
-            if rng.random() < cfg.tableau_bonus_prob and "Tableau" not in tools:
-                tools.append("Tableau")
-                anomaly_counts["duplicate_tool"] += 1
-
+    for _, emp in df_emp.iterrows():
+        tools = DEPT_TOOLS.get(emp["department"], ["Slack"])
         for tool in tools:
-            sub_id = unique_sub_id()
+            # Cohort month: randomly chosen from the past 12 months
+            cohort_offset = random.randint(0, HISTORY_MONTHS - 1)
+            cohort_month  = months_back(cohort_offset)
 
-            # ── Determine login pattern ────────────────────────────────────────
-            if emp["status"] == "Terminated":
-                # Terminated employee: account still active, no recent logins
-                days_since = rng.randint(45, 180)
-                logins = 0
-                anomaly_counts["terminated"] += 1
-
-            elif rng.random() < cfg.zombie_rate:
-                # Zombie: active employee, zero logins in past 30 days
-                days_since = rng.randint(cfg.inactivity_days_min, cfg.inactivity_days_max)
-                logins = 0
-                anomaly_counts["zombie"] += 1
-
-            elif rng.random() < cfg.partial_usage_rate:
-                # Partial: technically used but barely — worth flagging separately
-                days_since = rng.randint(5, 25)
-                logins = rng.randint(1, 4)
-                anomaly_counts["partial"] += 1
-
-            else:
-                # Healthy usage
-                days_since = rng.randint(cfg.active_days_min, cfg.active_days_max)
-                logins = rng.randint(5, 40)
-
-            last_login = (today - timedelta(days=days_since)).strftime("%Y-%m-%d")
-
-            subscriptions.append({
-                "sub_id":         sub_id,
+            rows.append({
+                "sub_id":         f"S{sub_id:04d}",
                 "emp_id":         emp["emp_id"],
                 "tool_name":      tool,
-                "monthly_cost":   cfg.saas_catalogue[tool],
+                "monthly_cost":   TOOLS[tool],
                 "license_status": "Active",
+                "cohort_month":   cohort_month.isoformat(),   # used by Phase 1 logic below
             })
-            usage_logs.append({
-                "sub_id":              sub_id,
-                "emp_id":              emp["emp_id"],
-                "tool_name":           tool,
-                "last_login_date":     last_login,
-                "logins_last_30_days": logins,
+            sub_id += 1
+
+    return pd.DataFrame(rows)
+
+
+def generate_usage_logs(df_subs: pd.DataFrame) -> pd.DataFrame:
+    """
+    Original single-snapshot usage_logs table.
+    Kept for backward compatibility with existing views and analyze_waste.py.
+    """
+    rows = []
+    for _, sub in df_subs.iterrows():
+        # ~20% chance of zombie license
+        if random.random() < 0.20:
+            logins = 0
+            last_login = date.today() - timedelta(days=random.randint(45, 120))
+        else:
+            logins = random.randint(1, 50)
+            last_login = date.today() - timedelta(days=random.randint(1, 29))
+
+        rows.append({
+            "sub_id":             sub["sub_id"],
+            "emp_id":             sub["emp_id"],
+            "tool_name":          sub["tool_name"],
+            "last_login_date":    last_login.isoformat(),
+            "logins_last_30_days": logins,
+        })
+    return pd.DataFrame(rows)
+
+
+def generate_historical_usage_logs(df_subs: pd.DataFrame) -> pd.DataFrame:
+    """
+    NEW TABLE for Phase 1.
+
+    For every subscription, generate one row per month from its cohort_month
+    up to today (max 12 months). Each row has a login_count for that month.
+
+    January Cohort Anomaly
+    ──────────────────────
+    If the cohort_month is in January AND the tool is Salesforce:
+      - Month 0 and Month 1: normal heavy usage (15–40 logins)
+      - Month 2 onwards:     40% of these employees drop to 0 logins
+    This creates a visible "cliff" in the Power BI retention heatmap.
+    """
+    rows = []
+
+    # Pre-decide which employees are "stagnators" for the Jan/Salesforce anomaly.
+    # We pick them randomly but consistently (seed is fixed).
+    jan_salesforce_subs = df_subs[
+        (df_subs["cohort_month"].str.startswith(str(date.today().year - 1) + "-01") |
+         df_subs["cohort_month"].str.startswith(str(date.today().year) + "-01")) &
+        (df_subs["tool_name"] == "Salesforce")
+    ]["sub_id"].tolist()
+
+    # 40% of them will stagnate at month 3.
+    # max(..., 1) guarantees at least 1 stagnator even in small cohorts,
+    # so the drop-off is always visible in Power BI.
+    if jan_salesforce_subs:
+        stagnator_count = max(1, int(len(jan_salesforce_subs) * 0.40))
+        stagnators = set(random.sample(jan_salesforce_subs, k=stagnator_count))
+    else:
+        stagnators = set()
+
+    for _, sub in df_subs.iterrows():
+        cohort_date = date.fromisoformat(sub["cohort_month"])
+
+        for month_offset in range(HISTORY_MONTHS):
+            billing_month = add_months(cohort_date, month_offset)
+
+            # Don't generate future months
+            if billing_month > date.today():
+                break
+
+            months_active = month_offset  # 0 = cohort month, 1 = next month, etc.
+
+            # ── January Cohort Anomaly ──────────────────────────────────────
+            if sub["sub_id"] in stagnators and months_active >= 2:
+                login_count = 0          # stagnated — simulates feature abandonment
+
+            elif sub["sub_id"] in jan_salesforce_subs and months_active < 2:
+                login_count = random.randint(15, 40)   # heavy early usage
+
+            # ── Normal behaviour for everyone else ──────────────────────────
+            else:
+                # Slight decay in logins over time (realistic)
+                base = max(1, 30 - months_active * 2)
+                login_count = random.randint(0, base)
+
+            rows.append({
+                "sub_id":        sub["sub_id"],
+                "emp_id":        sub["emp_id"],
+                "tool_name":     sub["tool_name"],
+                "billing_month": billing_month.isoformat(),
+                "login_count":   login_count,
             })
 
-    df_subs = pd.DataFrame(subscriptions).astype({
-        "sub_id":         "string",
-        "emp_id":         "int64",
-        "tool_name":      "string",
-        "monthly_cost":   "int64",
-        "license_status": "string",
-    })
-    df_usage = pd.DataFrame(usage_logs).astype({
-        "sub_id":              "string",
-        "emp_id":              "int64",
-        "tool_name":           "string",
-        "last_login_date":     "string",
-        "logins_last_30_days": "int64",
-    })
+    return pd.DataFrame(rows)
 
-    # ── 3. Summary ────────────────────────────────────────────────────────────
-    total_monthly = df_subs["monthly_cost"].sum()
-    log.info("  Total subscriptions: %d  |  Total monthly spend: $%d", len(df_subs), total_monthly)
-    log.info(
-        "  Anomalies injected — zombie: %d | terminated: %d | partial: %d | over-licensed: %d",
-        anomaly_counts["zombie"], anomaly_counts["terminated"],
-        anomaly_counts["partial"], anomaly_counts["duplicate_tool"],
-    )
 
-    # ── 4. Export ─────────────────────────────────────────────────────────────
-    paths = {
-        "employees":    os.path.join(cfg.output_dir, "employees.csv"),
-        "subscriptions": os.path.join(cfg.output_dir, "subscriptions.csv"),
-        "usage_logs":   os.path.join(cfg.output_dir, "usage_logs.csv"),
-    }
-    df_employees.to_csv(paths["employees"],    index=False)
-    df_subs.to_csv(paths["subscriptions"],     index=False)
-    df_usage.to_csv(paths["usage_logs"],       index=False)
+# ── Orchestrator ──────────────────────────────────────────────────────────────
 
-    log.info("Data saved to: %s", cfg.output_dir)
-    log.info("✓ Data generation complete.")
+def generate(data_dir: str | None = None) -> None:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir   = data_dir or os.path.join(script_dir, "..", "data")
+    os.makedirs(data_dir, exist_ok=True)
+
+    print("SubScan — generating synthetic data …")
+
+    df_emp  = generate_employees()
+    df_subs = generate_subscriptions(df_emp)
+    df_usage        = generate_usage_logs(df_subs)
+    df_hist_usage   = generate_historical_usage_logs(df_subs)
+
+    # Drop cohort_month from subscriptions before saving
+    # (it was only needed internally for the historical generator)
+    df_subs_clean = df_subs.drop(columns=["cohort_month"])
+
+    # Save all four CSVs
+    df_emp.to_csv(            os.path.join(data_dir, "employees.csv"),              index=False)
+    df_subs_clean.to_csv(     os.path.join(data_dir, "subscriptions.csv"),          index=False)
+    df_usage.to_csv(          os.path.join(data_dir, "usage_logs.csv"),             index=False)
+    df_hist_usage.to_csv(     os.path.join(data_dir, "historical_usage_logs.csv"),  index=False)
+
+    print(f"  employees.csv              → {len(df_emp)} rows")
+    print(f"  subscriptions.csv          → {len(df_subs_clean)} rows")
+    print(f"  usage_logs.csv             → {len(df_usage)} rows")
+    print(f"  historical_usage_logs.csv  → {len(df_hist_usage)} rows")
+    print("  ✓ Done — all CSVs written to:", data_dir)
 
 
 if __name__ == "__main__":
-    generate(DataConfig())
+    generate()

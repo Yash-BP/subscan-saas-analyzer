@@ -23,7 +23,7 @@ import time
 # Add scripts dir to path so sibling imports work whether called from root or scripts/
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from generate_billing_data import generate, DataConfig
+from generate_billing_data import generate
 from setup_db import setup
 from analyze_waste import analyze
 
@@ -92,7 +92,7 @@ def main() -> None:
     pipeline_start = time.perf_counter()
 
     if not args.skip_gen and not args.only_analyze:
-        _run_step("Generate billing data", generate, DataConfig())
+        _run_step("Generate billing data", generate)
 
     if not args.only_analyze:
         _run_step("Build SQLite database", setup)
@@ -100,14 +100,19 @@ def main() -> None:
     df_waste = _run_step("Run analytics engine", analyze)
 
     total_elapsed = time.perf_counter() - pipeline_start
+    wasted_licenses = len(df_waste)
+    monthly_waste = int(df_waste["monthly_cost"].sum())
+    annual_waste = int(df_waste["annual_waste"].sum())
+
+    box_width = 54
     log.info("")
-    log.info("╔══════════════════════════════════════════════╗")
-    log.info("║         Pipeline complete  (%.2fs)          ║", total_elapsed)
-    log.info("║                                              ║")
-    log.info("║  Wasted licenses : %-4d                      ║", len(df_waste))
-    log.info("║  Monthly waste   : $%-8s                 ║", f"{int(df_waste['monthly_cost'].sum()):,}")
-    log.info("║  Annual waste    : $%-8s                 ║", f"{int(df_waste['annual_waste'].sum()):,}")
-    log.info("╚══════════════════════════════════════════════╝")
+    log.info("╔" + "═" * box_width + "╗")
+    log.info("║{:^54}║".format(f"Pipeline Complete ({total_elapsed:.2f}s)"))
+    log.info("╠" + "═" * box_width + "╣")
+    log.info("║{:^54}║".format(f"Wasted Licenses : {wasted_licenses}"))
+    log.info("║{:^54}║".format(f"Monthly Waste   : ${monthly_waste:,}"))
+    log.info("║{:^54}║".format(f"Annual Waste    : ${annual_waste:,}"))
+    log.info("╚" + "═" * box_width + "╝")
     log.info("")
 
 
